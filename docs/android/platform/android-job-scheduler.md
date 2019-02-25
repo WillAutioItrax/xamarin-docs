@@ -41,7 +41,7 @@ To schedule work with the Android Job Scheduler, a Xamarin.Android application m
 
 * **bool OnStartJob(JobParameters parameters)** &ndash; This method is called by the `JobScheduler` to perform work, and runs on the main thread of the application. It is the responsibility of the `JobService` to asynchronously perform the work and  `true` if there is work remaining, or `false` if the work is done.
     
-    When the `JobScheduler` calls this method, it will request and retain a wakelock from Android for the duration of the job. When the job is finished, it is the responsibility of the `JobService` to tell the `JobScheduler` of this fact by call the `JobFinished` method (described next).
+    When the `JobScheduler` calls this method, it will request and retain a wakelock from Android for the duration of the job. When the job is finished, it is the responsibility of the `JobService` to tell the `JobScheduler` of this fact by calling the `JobFinished` method (described next).
 
 * **JobFinished(JobParameters parameters, bool needsReschedule)** &ndash; This method must be called by the `JobService` to tell the `JobScheduler` that the work is done. If `JobFinished` is not called, the `JobScheduler` will not remove the wakelock, causing unnecessary battery drain. 
 
@@ -70,7 +70,7 @@ All work performed by the Android Job Scheduler library must be done in a type t
 1. Extend the `JobService` class.
 2. Decorate the subclass with the `ServiceAttribute` and set the `Name` parameter to a string that is made up of the package name and the name of the class (see the following example).
 3. Set the `Permission` property on the `ServiceAttribute` to the string `android.permission.BIND_JOB_SERVICE`.
-4. Override the `OnStartJob` method, adding the code to perform the work. Android will invoke this method on the main thread of the application to run the job. Work that will take longer that a few milliseconds should be performed on a thread to avoid blocking the application.
+4. Override the `OnStartJob` method, adding the code to perform the work. Android will invoke this method on the main thread of the application to run the job. Work that will take longer than a few milliseconds should be performed on a thread to avoid blocking the application.
 5. When the work is done, the `JobService` must call the `JobFinished` method. This method is how `JobService` tells the `JobScheduler` that work is done. Failure to call `JobFinished` will result in the `JobService` putting unnecessary demands on the device, shortening the battery life. 
 6. It is a good idea to also override the `OnStopJob` method. This method is called by Android when the job is being shut down before it is finished and provides the `JobService` with an opportunity to properly dispose of any resources. This method should return `true` if it is necessary to reschedule the job, or `false` if it is not desireable to re-run the job.
    
